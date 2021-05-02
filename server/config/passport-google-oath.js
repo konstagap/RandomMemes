@@ -5,9 +5,7 @@ module.exports = new GoogleStrategy(
 	{
 		clientID: process.env.GOOGLE_CLIENT_ID,
 		clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-		callbackURL: `${
-			process.env.NODE_ENV ? '' : 'http://localhost:3001'
-		}/auth/google/callback`,
+		callbackURL: '/auth/google/callback',
 		passReqToCallback: true
 	},
 	function (request, accessToken, refreshToken, profile, done) {

@@ -5,7 +5,7 @@ const { isAuth, sendUser, createUser } = require('../config/authMiddleware');
 require('dotenv').config();
 
 // facebook OAUTHROUTES
-router.get('/auth/facebook', passport.authenticate('facebook'));
+router.get('/api/auth/facebook', passport.authenticate('facebook'));
 router.get(
 	'/auth/facebook/callback',
 	passport.authenticate('facebook', {
@@ -15,7 +15,7 @@ router.get(
 );
 // ------GOOGLE OAUTH ROUTES
 router.get(
-	'/auth/google',
+	'/api/auth/google',
 	passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 router.get(
@@ -27,16 +27,21 @@ router.get(
 );
 
 // SIGN UP ROUTE WITH AUTHOMATIC LOG IN VIA PASSPORT LOCAL STRATEGY
-router.post('/signup', createUser, passport.authenticate('local'), sendUser);
+router.post(
+	'/api/signup',
+	createUser,
+	passport.authenticate('local'),
+	sendUser
+);
 
 // LOG IN ROUTE WITH PASSPORT LOCAL STRATEGY
-router.post('/login', passport.authenticate('local'), sendUser);
+router.post('/api/login', passport.authenticate('local'), sendUser);
 
 // ROUTE ROUTE, checking cookies, if req.user populated via passport.desirializer then send user
-router.get('/', sendUser);
+router.get('/api/', sendUser);
 
 // LOG OUT USER, DELETES SESSION AND COOKIES
-router.get('/logout', isAuth, (req, res) => {
+router.get('/api/logout', isAuth, (req, res) => {
 	req.logout();
 	res.end();
 });

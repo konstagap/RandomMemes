@@ -5,9 +5,7 @@ module.exports = new FacebookStrategy(
 	{
 		clientID: process.env.FACEBOOK_CLIENT_ID,
 		clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-		callbackURL: `${
-			process.env.NODE_ENV ? '' : 'http://localhost:3001'
-		}/auth/facebook/callback`,
+		callbackURL: '/auth/facebook/callback',
 		profileFields: ['id', 'displayName', 'picture.type(large)']
 	},
 	function (request, accessToken, refreshToken, profile, done) {

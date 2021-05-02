@@ -12,6 +12,7 @@ const mongooseConnection = require('./config/database');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
+
 //  -------------- GENERAL SETUP ----------------
 // Create the Express application
 var app = express();
@@ -21,7 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 // Setting CORS so that any website can Access our API
 app.use(
 	cors({
-		origin: 'http://localhost:3000',
+		origin: `${
+			process.env.NODE_ENV === 'production'
+				? ''
+				: `${process.env.CLIENT_BASE_URL}`
+		}`,
 		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
 		credentials: true
 	})
@@ -30,7 +35,6 @@ app.use(
 app.use(sessions);
 
 //  -------------- PASSPORT AUTHENTICATION ----------------
-// Need to require the entire Passport config module so app.js knows about it
 passport.use(passportLocalStrategy);
 passport.use(passportGoogleOath);
 passport.use(passportFacebookOauth);
@@ -52,11 +56,19 @@ passport.deserializeUser((id, done) => {
 // Imports all of the routes from ./routes/index.js
 app.use(routes);
 
+// Serve up static assets
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static(path.join(__dirname, 'client/build')));
+	app.get('*', (req, res) => {
+		res.sendFile(path.join(__dirname, '../client/', 'build', 'index.html'));
+	});
+}
+
 //-------------- SERVER ----------------+
 mongooseConnection.once('open', function () {
 	// we're connected!
 	app.listen(PORT, () => {
-		console.log(`Server listens on http://localhost:${PORT}`);
+		console.log(`Server listens on port ${PORT}`);
 	});
 });
 

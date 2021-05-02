@@ -4,7 +4,7 @@ export const LOGOUT_ROUTE = 'logout';
 
 export const requestUser = async (user, route) => {
 	try {
-		const response = await fetch(`http://localhost:3001/${route}`, {
+		const response = await fetch(`/api/${route}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ export const requestUser = async (user, route) => {
 
 export const initialUser = async () => {
 	try {
-		const response = await fetch('http://localhost:3001/', {
+		const response = await fetch('/api', {
 			credentials: 'include'
 		});
 		if (response.status === 404) {
@@ -39,7 +39,7 @@ export const initialUser = async () => {
 
 export const logout = async () => {
 	try {
-		await fetch(`http://localhost:3001/${LOGOUT_ROUTE}`, {
+		await fetch(`/api/${LOGOUT_ROUTE}`, {
 			credentials: 'include'
 		});
 	} catch (error) {
