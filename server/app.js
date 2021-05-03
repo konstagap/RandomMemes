@@ -11,7 +11,7 @@ const mongooseConnection = require('./config/database');
 
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
 
 //  -------------- GENERAL SETUP ----------------
 // Create the Express application
@@ -58,17 +58,17 @@ app.use(routes);
 
 // Serve up static assets
 if (process.env.NODE_ENV === 'production') {
-	app.use(express.static(path.join(__dirname, 'client/build')));
+	app.use(express.static(path.join(__dirname, '../client/build')));
 	app.get('*', (req, res) => {
-		res.sendFile(path.join(__dirname, '../client/', 'build', 'index.html'));
+		res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 	});
 }
 
 //-------------- SERVER ----------------+
 mongooseConnection.once('open', function () {
 	// we're connected!
-	app.listen(PORT, () => {
-		console.log(`Server listens on port ${PORT}`);
+	app.listen(process.env.PORT || 3001, () => {
+		console.log(`Server listens on port ${process.env.PORT || 3001}`);
 	});
 });
 
